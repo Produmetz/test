@@ -34,10 +34,11 @@ function DividedDifferences(array_x,array_y)
 			let i=0;
 			while((i+1)<arrayyy.length)
 				{
-					ArrayDD[i]=DD(array_x[i],array_x[i+1],arrayyy[i],arrayyy[i+1]);i++;
+					ArrayDD[i]=DD(array_x[i],array_x[i+1+rang],arrayyy[i],arrayyy[i+1]);i++;
 				};
 			arrayyy=ArrayDD;
-			ArrayDividedDifferences[rang]=ArrayDD[rang];
+			ArrayDividedDifferences[rang]=ArrayDD[0];
+			ArrayDD=[];
 			rang++;
 		};	
 	};
@@ -55,8 +56,8 @@ function PolinomNewton(x,array_x,array_y)
 		return result;
 	};
 	
-	let array_x=[0,10,20,30];
-	let array_y=[0,10,20,30];
+	let array_x=[-2,-1,-0.5,0.5,1,2];
+	let array_y=[27,24,23.25,23.25,24,27];
 	let value;
-	value=PolinomNewton(5,array_x,array_y);
+	value=PolinomNewton(-1,array_x,array_y);
 	alert(value);
