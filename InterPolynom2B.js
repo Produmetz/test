@@ -5,7 +5,7 @@ let ArrayDividedDifferences=[];
 function Multi(x,y)
 	{
 		let result;
-		result=Number((x*y).toFixed(10));
+		result=Number((x*y).toFixed(8));
 		return result;
 	};
 
@@ -19,10 +19,11 @@ function DD(x_1,x_2,y_1,y_2)
 
 function Diff(x,array_x,n)
 	{ 
-		let result=1,i=0;
-		while(i<n+1)
+		let result=1,i=0,turn;let k=array_x.length;
+		while(n+i<k)
 		{
-			result=Multi(result,(x-array_x[i]));i++;
+			turn=NtF((x-array_x[k-i-1]),8);
+			result=Multi(result,turn);i++;
 		};
 		return result;
 	};	
@@ -36,10 +37,13 @@ function DividedDifferences(array_x,array_y)
 				{
 					ArrayDD[i]=DD(array_x[i],array_x[i+1+rang],arrayyy[i],arrayyy[i+1]);i++;
 				};
+			if(rang<array_x.length-1)
+			{
 			arrayyy=ArrayDD;
 			ArrayDividedDifferences[rang]=ArrayDD[arrayyy.length-1];
 			ArrayDD=[];
 			rang++;
+			}else{rang++;};
 		};	
 	};
 	
@@ -52,22 +56,23 @@ function Oper(x)
  	
 function PolinomNewton(x,array_x,array_y)
 	{
-		let result;let i=0;i=ArrayDividedDifferences.length;i=i-1;
+		let result;let i;let n=array_x.length-1;
 		DividedDifferences(array_x,array_y);
-	    
+		i=0; 
 		result=array_y[array_x.length-1];
-		while(i>0)
+		while(i<ArrayDividedDifferences.length-1)
 		{
-			result=result+Multi(Diff(x,array_x,i),ArrayDividedDifferences[i]);
-			i--;
+			result=result+Multi(Diff(x,array_x,n-i,i),ArrayDividedDifferences[i]);
+			i++;
 		};
-		return NtF(result,10);
+		return NtF(result,8);
 	};
 	
-	let array_x=[-0.9, -0.7, -0.3 ,0.1 ,0.5 ,0.8] ;
+	let array_x=[-0.9, -0.7, -0.3 ,0.1 ,0.5 ,0.8] ; ;
 	let array_y=[];
 	let valueP=[];let valueF=[];
-	let k=0,i=0;let valueX;
+	
+function Fill(){	let k=0,i=0;let valueX;
 	
 	while(i<array_x.length){array_y[i]=Oper(array_x[i]);i++};
 	valueX=-1;
@@ -85,11 +90,12 @@ function PolinomNewton(x,array_x,array_y)
 			array_x[k]=valueX;
 			valueX=NtF(valueX+0.05,3);
 			k++;
-		};	
+};	};
 
 ////////////////////////////////////////////////////////////
 let canvas = document.getElementById("canvas");
 let context = canvas.getContext("2d");
+
 
 function Max(array)
 	{
@@ -106,8 +112,8 @@ function Min(array)
 
 function DrawPoint(x,y,color)
 	{
-		context.beginPath();
 		
+		context.beginPath();
 		context.fillStyle = color;
 		context.fillRect(x-1, y-1, 2, 2);
 		context.closePath();
@@ -117,7 +123,23 @@ function DrawArray(array_x,array_y,scale,color)
 		let result,i=0;
 		while(i<array_x.length)
 			{
-				DrawPoint(500+Math.round(array_x[i]/scale),400+Math.round(array_y[i]/scale),color);i++;
+				DrawPoint(500+Math.round(array_x[i]/scale),400-Math.round(array_y[i]/scale),color);i++;
 			};
 	};
-DrawArray(array_x,valueP,0.009,'red');
+function DrawLine(x,y,x1,y1)
+	{
+		
+		context.beginPath();
+		context.lineWidth = 0.04;
+		context.moveTo(x,y);
+		context.lineTo(x1,y1);
+		context.stroke();
+		context.closePath();
+	};	
+DrawLine(1,400,999,400);
+DrawLine(500,1,500,799);
+Fill();
+DrawArray(array_x,valueP,0.006,'red');
+DrawArray(array_x,valueF,0.006,'blue');
+DrawPoint(500,400,'black')
+
