@@ -72,23 +72,23 @@ function PolinomNewton(x,array_x,array_y)
 	let array_y=[];
 	let valueP=[];let valueF=[];
 	
-function Fill(){	let k=0,i=0;let valueX;
+function Fill(a,b,h){	let k=0,i=0;let valueX;
 	
 	while(i<array_x.length){array_y[i]=Oper(array_x[i]);i++};
-	valueX=-1;
-	while(valueX<=1)
+	valueX=a;
+	while(valueX<=b)
 		{
 			valueP[k]=PolinomNewton(valueX,array_x,array_y);
 			valueF[k]=Oper(valueX);
 		
 			k++;
-			valueX=NtF(valueX+0.05,3);
+			valueX=NtF(valueX+h,3);
 		};
-	valueX=-1;k=0;
-	while(valueX<=1)
+	valueX=a;k=0;
+	while(valueX<=b)
 		{
 			array_x[k]=valueX;
-			valueX=NtF(valueX+0.05,3);
+			valueX=NtF(valueX+h,3);
 			k++;
 };	};
 
@@ -118,28 +118,32 @@ function DrawPoint(x,y,color)
 		context.fillRect(x-1, y-1, 2, 2);
 		context.closePath();
 	};
-function DrawArray(array_x,array_y,scale,color)
-	{
-		let result,i=0;
-		while(i<array_x.length)
-			{
-				DrawPoint(500+Math.round(array_x[i]/scale),400-Math.round(array_y[i]/scale),color);i++;
-			};
-	};
-function DrawLine(x,y,x1,y1)
+	function DrawLine(x,y,x1,y1,color)
 	{
 		
 		context.beginPath();
-		context.lineWidth = 0.04;
+		context.strokeStyle = color;
+		context.lineWidth = 0.1;
 		context.moveTo(x,y);
 		context.lineTo(x1,y1);
 		context.stroke();
 		context.closePath();
 	};	
+function DrawArray(array_x,array_y,scale,color)
+	{
+		let result,i=0;
+		while(i<array_x.length)
+			{
+				DrawPoint(500+Math.round(array_x[i]/scale),400-Math.round(array_y[i]/scale),color);
+				DrawLine(500+Math.round(array_x[i]/scale),400-Math.round(array_y[i]/scale),500+Math.round(array_x[i+1]/scale),400-Math.round(array_y[i+1]/scale),color)
+				i++;
+			};
+	};
+
 DrawLine(1,400,999,400);
 DrawLine(500,1,500,799);
-Fill();
-DrawArray(array_x,valueP,0.006,'red');
-DrawArray(array_x,valueF,0.006,'blue');
+Fill(-1,1,0.05);
+DrawArray(array_x,valueP,0.005,'red');
+DrawArray(array_x,valueF,0.005,'blue');
 DrawPoint(500,400,'black')
 
